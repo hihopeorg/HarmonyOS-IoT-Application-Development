@@ -1,13 +1,54 @@
-# HarmonyOS-IoT-Application-Development-in-Practice
+# Harmony OS物联网应用开发实战
 
 #### 介绍
 《Harmony OS物联网应用开发实战》课程代码
 
-** 持续更新中，欢迎点击 Star/Watch 关注本项目 **
+**持续更新中，欢迎点击 Star/Watch 关注本项目**
+
+
 
 #### 课程目录
 
 * 第一讲 从零开始搭建HarmonyOS开发环境
-* 第二讲 使用Harmony OS控制外围设备
+
+* 第二讲 使用Harmony OS控制外设——输入输出
+* 第三讲 使用Harmony OS控制外设——读取传感器
+* 第四讲 使用Harmony OS控制WiFi——连接热点、创建热点
+* 第五讲 使用Harmony OS进行网络编程——使用TCP/IP协议
+* 第六讲 使用Harmony OS进行物联网应用开发——使用MQTT、CoAP协议
+
+
+
+## 套件简介
+
+HiSpark WiFi IoT套件，整个套件有一个核心板和七个扩展模块：
+
+1. 核心板
+   * 主控芯片：Hi3861V100
+   * 串口芯片：CH340G
+2. 交通灯板
+   * 红黄绿三个LED
+   * 蜂鸣器
+   * 按键
+3. 炫彩灯板
+   * 人体红外检测
+   * 光敏电阻
+   * 三色LED
+4. 环境监测板
+   * AHT20温湿度传感器
+   * MQ-2燃气传感器
+   * 蜂鸣器
+5. OLED板
+   * SSD1306芯片
+   * 0.96吋OLED屏（分辨率：128x64）
+6. NFC板
+   * FM11NC08I 芯片
+7. 机器人扩展板
+   * L9110S 电机驱动 * 2
+
+购买链接：https://item.taobao.com/item.htm?id=626113480729
+
+
+
 
 
