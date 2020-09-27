@@ -3,7 +3,7 @@
 #### 介绍
 《Harmony OS物联网应用开发实战》课程代码
 
-**持续更新中，欢迎点击 Star/Watch 关注本项目**
+**持续更新中，欢迎点右上角的 Star 或 Watch 关注本项目**
 
 
 
@@ -27,6 +27,8 @@
 
 HiSpark WiFi IoT套件，整个套件有一个核心板和七个扩展模块：
 
+**购买链接**：https://item.taobao.com/item.htm?id=626113480729
+
 1. 核心板
    * 主控芯片：Hi3861V100
    * 串口芯片：CH340G
@@ -49,8 +51,6 @@ HiSpark WiFi IoT套件，整个套件有一个核心板和七个扩展模块：
    * FM11NC08I 芯片
 7. 机器人扩展板
    * L9110S 电机驱动 * 2
-
-购买链接：https://item.taobao.com/item.htm?id=626113480729
 
 
 
