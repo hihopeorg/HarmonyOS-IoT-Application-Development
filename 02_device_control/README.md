@@ -1,20 +1,38 @@
 # Harmony OS物联网应用开发实战 第二讲
 
-本节课程中向大家演示如何使用Hamony OS控制外设，具体包括：
+本节课程中向大家演示如何使用Hamony OS控制外设。
+
+
+
+## 相关知识点
 
 * 官方第一个应用程序示例演示
   * 熟悉使用DevEco Device Tool插件进行程序烧录
   * 熟悉串口调试工具sscom的使用
 
-* 官方的控制核心板上LED的演示
-	* GPIO_9 连接LED灯，输出低电平点亮LED灯
-	* GPIO_5 连接按键，按键中断控制LED灯状态反转
-* HiSpark Wi-Fi IoT 开发套件 交通灯板 演示
-	* GPIO_8 连接蜂鸣器，输出PWM波控制蜂鸣器发出声音
-	* GPIO_9 连接按键，按键中断切换亮的LED灯，同时切换蜂鸣器响或者不响
-	* GPIO_10 连接红色LED，输出高电平点亮红色LED灯
-	* GPIO_11 连接绿色LED，输出高电平点亮绿色LED灯
-	* GPIO_12 连接黄色LED，输出高电平点亮黄色LED灯
+* 官方文档中控制核心板上LED的演示
+	* Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
+	* 使用GPIO接口输出高低电平，实现控制LED灯亮灭
+	* 使用GPIO接口注册中断处理函数，实现USER按键响应（输入）
+* （直播编码）HiSpark Wi-Fi IoT 开发套件 交通灯板 控制演示
+	* 使用PWM接口输出PWM方波，实现蜂鸣器控制
+	* 使用GPIO接口的部分和上一个示例类似
+
+
+
+## 核心板和交通灯板上外设与主控芯片（Hi3861）引脚的对应关系
+
+* 核心板
+  * GPIO_9 连接LED灯，输出低电平点亮LED灯
+  * GPIO_5 连接按键，按键中断控制LED灯状态反转
+* 交通灯板
+  * GPIO_8 连接蜂鸣器，输出PWM波控制蜂鸣器发出声音
+  * GPIO_9 连接按键，按键中断切换亮的LED灯，同时切换蜂鸣器响或者不响
+  * GPIO_10 连接红色LED，输出高电平点亮红色LED灯
+  * GPIO_11 连接绿色LED，输出高电平点亮绿色LED灯
+  * GPIO_12 连接黄色LED，输出高电平点亮黄色LED灯
+
+
 
 ## 如何编译
 

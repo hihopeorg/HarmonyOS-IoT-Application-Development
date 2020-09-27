@@ -10,8 +10,12 @@
 #### 课程目录
 
 * 第一讲 从零开始搭建HarmonyOS开发环境
-
+  * [Harmony OS 开发指南——源码下载和编译](hos_source_code_download_and_compile.md)
+  * [Harmony OS 开发指南——DevEco Device Tool 安装配置](hos_source_code_download_and_compile.md)
 * 第二讲 使用Harmony OS控制外设——输入输出
+  * Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
+  * Harmony OS GPIO相关接口的使用（具体使用参考头文件注释）
+  * Harmony OS PWM相关接口的使用（具体使用参考头文件注释）
 * 第三讲 使用Harmony OS控制外设——读取传感器
 * 第四讲 使用Harmony OS控制WiFi——连接热点、创建热点
 * 第五讲 使用Harmony OS进行网络编程——使用TCP/IP协议

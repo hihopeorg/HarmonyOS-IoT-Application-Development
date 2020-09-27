@@ -1,4 +1,4 @@
-# Harmony OS 开发避坑指南——DevEco Device Tool 安装配置
+# Harmony OS 开发指南——DevEco Device Tool 安装配置
 
 本文介绍如何在Windows主机上安装DevEco Device Tool工具。
 
