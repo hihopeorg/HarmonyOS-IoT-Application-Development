@@ -12,8 +12,15 @@
 
 * 官方文档中控制核心板上LED的演示
 	* Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
+	  * 线程创建`osThreadNew`
+	* 鸿蒙系统启动注册接口——`ohos_init.h`
+	  * `APP_FEATURE_INIT`注册自启动函数
 	* 使用GPIO接口输出高低电平，实现控制LED灯亮灭
+	  * 设置管脚功能`IoSetFunc`
+	  * 设置GPIO引脚方向`GpioSetDir`
 	* 使用GPIO接口注册中断处理函数，实现USER按键响应（输入）
+	  * 设置内部上拉下拉状态`IoSetPull`（没有外部上拉电阻时需要设置上拉，才能保证能够检测到下降沿）
+	  * 注册中断处理函数`GpioRegisterIsrFunc`，具体参数使用参考头文件说明
 * （直播编码）HiSpark Wi-Fi IoT 开发套件 交通灯板 控制演示
 	* 使用PWM接口输出PWM方波，实现蜂鸣器控制
 	* 使用GPIO接口的部分和上一个示例类似
