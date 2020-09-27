@@ -37,20 +37,14 @@
 #include "wifiiot_watchdog.h"
 #include "wifiiot_pwm.h"
 
-#define LED_INTERVAL_TIME_US 300000
-#define LED_TASK_STACK_SIZE 1024
-
-int g_ledStates[3] = {0, 0, 0};
-
-int g_currentBright = 0;
-
-int g_beepState = 0;
+static int g_ledStates[3] = {0, 0, 0};
+static int g_currentBright = 0;
+static int g_beepState = 0;
 
 static void *TrafficLightTask(const char *arg)
 {
     (void)arg;
 
-    usleep(LED_INTERVAL_TIME_US);
     printf("TrafficLightTask start!\r\n");
     WifiIotGpioIdx pins[] = {WIFI_IOT_GPIO_IDX_10, WIFI_IOT_GPIO_IDX_11, WIFI_IOT_GPIO_IDX_12};
     for (int i = 0; i < 4; i++) {
@@ -124,7 +118,7 @@ static void StartTrafficLightTask(void)
     attr.cb_mem = NULL;
     attr.cb_size = 0U;
     attr.stack_mem = NULL;
-    attr.stack_size = LED_TASK_STACK_SIZE;
+    attr.stack_size = 1024;
     attr.priority = osPriorityNormal;
 
     if (osThreadNew((osThreadFunc_t)TrafficLightTask, NULL, &attr) == NULL) {
