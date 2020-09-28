@@ -1,7 +1,7 @@
 # Harmony OS物联网应用开发实战
 
 #### 介绍
-《Harmony OS物联网应用开发实战》课程代码
+《Harmony OS物联网应用开发实战》课程资料（包含代码）
 
 **持续更新中，欢迎点右上角的 Star 或 Watch 关注本项目**
 
@@ -14,9 +14,11 @@
   * [Harmony OS 开发指南——DevEco Device Tool 安装配置](01_envsetup/hos_source_code_download_and_compile.md)
 * 第二讲 [使用Harmony OS控制外设——输入输出](02_device_control/README.md)
   * Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
-  * Harmony OS GPIO相关接口的使用（具体使用参考头文件注释）
-  * Harmony OS PWM相关接口的使用（具体使用参考头文件注释）
-* 第三讲 使用Harmony OS控制外设——读取传感器
+  * Harmony OS GPIO相关接口的使用（具体参考`wifiiot_gpio.h`中的注释）
+  * Harmony OS PWM相关接口的使用（具体参考`wifiiot_pwm.h`中的注释）
+* 第三讲 [使用Harmony OS控制外设——读取传感器](03_sensing/README.md)
+  * Harmony OS ADC相关接口的使用（具体参考`wifiiot_adc.h`中的注释）
+  * Harmony OS I2C相关接口的使用（具体参考`wifiiot_i2c.h`中的注释）
 * 第四讲 使用Harmony OS控制WiFi——连接热点、创建热点
 * 第五讲 使用Harmony OS进行网络编程——使用TCP/IP协议
 * 第六讲 使用Harmony OS进行物联网应用开发——使用MQTT、CoAP协议
