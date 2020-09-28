@@ -1,13 +1,13 @@
 # Harmony OS物联网应用开发实战
 
-#### 介绍
+## 介绍
 《Harmony OS物联网应用开发实战》课程资料（包含代码）
 
 **持续更新中，欢迎点右上角的 Star 或 Watch 关注本项目**
 
 
 
-#### 课程目录
+## 课程目录
 
 * 第一讲 [从零开始搭建HarmonyOS开发环境](01_envsetup/README.md)
   * [Harmony OS 开发指南——源码下载和编译](01_envsetup/hos_source_code_download_and_compile.md)
