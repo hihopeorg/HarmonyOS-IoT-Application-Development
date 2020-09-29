@@ -66,16 +66,16 @@ HiSpark WiFi IoT套件，整个套件有一个核心板和七个扩展模块：
 ## 反馈与改进
 
 * **问题反馈**
-* 如果您发现了本项目中的错误或不当之处，可以在项目的issues页面进行反馈：https://gitee.com/hihopeorg/HarmonyOS-IoT-Application-Development/issues
-  
+  * 如果您发现了本项目中的错误或不当之处，可以在项目的issues页面进行反馈：https://gitee.com/hihopeorg/HarmonyOS-IoT-Application-Development/issues
+
 * **参与改进**
-* 您也可以通过fork本仓，修改后向本仓发起`Pull Request`请求合并；或者使用码云的轻量级PR，直接在本仓修改，修改完发起 PR；
+  * 您也可以通过fork本仓，修改后向本仓发起`Pull Request`请求合并；或者使用码云的轻量级PR，直接在本仓修改，修改完发起 PR；
 
 
 
 ## 支持我们
 
-本课程有配套的 HiSpark WiFi IoT 正在淘宝火热销售中，有多种组合方式供您选择，您可以只购买核心板，也可以购买各种套件：
+本课程配套的 HiSpark WiFi IoT 正在火热销售中，您可以只购买核心板，也可以购买各种套件：
 
 **购买链接**：https://item.taobao.com/item.htm?id=626113480729
 
