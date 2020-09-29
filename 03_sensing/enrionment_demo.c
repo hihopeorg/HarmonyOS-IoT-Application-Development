@@ -42,6 +42,10 @@
 #include "wifiiot_errno.h"
 #include "oled_ssd1306.h"
 
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+#endif
+
 #define MS_PER_S 1000
 #define BEEP_DURATION 100
 #define BEEP_PWM_DUTY 30000
@@ -54,131 +58,198 @@
 // #define GAS_SENSOR_PIN_NAME WIFI_IOT_IO_NAME_GPIO_11
 #define ADC_RESOLUTION 2048
 
-#define AHT_I2C_IDX WIFI_IOT_I2C_IDX_0
+#define AHT20_I2C_IDX WIFI_IOT_I2C_IDX_0
 
-#define AHT_SLEEP_20MS              (20)//20ms
-#define AHT_SLEEP_50MS              (50)//5ms
-#define AHT_SLEEP_1S                (1000)//1s
-#define AHT_DELAY_10MS              (10000)//10ms
-#define AHT_DELAY_40MS              (40000) //40ms
-#define AHT_DELAY_100MS             (100000) //100ms
-#define AHT_DEVICE_ADDR             (0x38) //device addr
-#define AHT_DEVICE_READ_STATUS      (0x71) //befor read tem&humi data need to send cmd to comfir the              
-#define AHT_DEVICE_INIT_CMD         (0xBE) //aht init cmd
-#define AHT_DEVICE_TEST_CMD         (0xAC) // test cmd
-#define AHT_DEVICE_PARAM_HIGH_BYTE  (0x33)
-#define AHT_DEVICE_PARAM_LOW_BYTE   (0x00)
-#define AHT_DEVICE_PARAM_INIT_HIGH  (0x08)
-#define AHT_DEVICE_CALIBRATION      (0x80)
-#define AHT_DEVICE_CALIBRATION_ERR  (0x1C)
-#define AHT_DEVICE_CALIBRATION_ERR_R (0x18)
-#define AHT_TASK_SLEEP_TIME         (20) //thread sleep 20ms
-#define BAUDRATE_INIT               (400000) 
+#define AHT20_STARTUP_TIME 20*1000 // 上电启动时间
+#define AHT20_CALIBRATION_TIME 40*1000 // 初始化（校准）时间
+#define AHT20_MEASURE_TIME    75*1000 // 测量时间
 
+#define AHT20_DEVICE_ADDR   0x38
+#define AHT20_READ_ADDR     ((0x38<<1)|0x1)
+#define AHT20_WRITE_ADDR    ((0x38<<1)|0x0)
 
-typedef enum{
-    AHT_TEMPERATURE =1,
-    AHT_HUMIDITY    =2,
-} aht_serson_type;
+#define AHT20_CMD_CALIBRATION       0xBE // 初始化（校准）命令
+#define AHT20_CMD_CALIBRATION_ARG0  0x08
+#define AHT20_CMD_CALIBRATION_ARG1  0x00
 
-#define  AHT_REG_ARRAY_LEN          (6)
-#define  AHT_OC_ARRAY_LEN           (6)
-#define  AHT_SNED_CMD_LEN           (3)
-#define  AHT20_DEMO_TASK_STAK_SIZE  (1024*4)
-#define  AHT20_DEMO_TASK_PRIORITY   (25)
-#define  AHT_REG_ARRAY_INIT_LEN     (1)
-#define  AHT_CALCULATION            (1048576)
+/**
+ * 传感器在采集时需要时间,主机发出测量指令（0xAC）后，延时75毫秒以上再读取转换后的数据并判断返回的状态位是否正常。
+ * 若状态比特位[Bit7]为0代表数据可正常读取，为1时传感器为忙状态，主机需要等待数据处理完成。
+ **/
+#define AHT20_CMD_TRIGGER       0xAC // 触发测量命令
+#define AHT20_CMD_TRIGGER_ARG0  0x33
+#define AHT20_CMD_TRIGGER_ARG1  0x00
 
-float aht_temp = 0;
-float aht_humi = 0;
+// 用于在无需关闭和再次打开电源的情况下，重新启动传感器系统，软复位所需时间不超过20 毫秒
+#define AHT20_CMD_RESET      0xBA // 软复位命令
 
-/*
-*Check whether the bit3 of the temperature and humidity sensor is initialized successfully, 
-*otherwise send the setting of 0xbe to set the sensor initialization
-*/
-static uint32_t ath20_check_and_init(uint8_t initCmd, uint8_t initHighByte, uint8_t initLowByte)
+#define AHT20_CMD_STATUS     0x71 // 获取状态命令
+
+/**
+ * STATUS 命令回复：
+ * 1. 初始化后触发测量之前，STATUS 只回复 1B 状态值；
+ * 2. 触发测量之后，STATUS 回复6B： 1B 状态值 + 2B 湿度 + 4b湿度 + 4b温度 + 2B 温度
+ *      RH = Srh / 2^20 * 100%
+ *      T  = St  / 2^20 * 200 - 50
+ **/
+#define AHT20_STATUS_BUSY_SHIFT 7       // bit[7] Busy indication
+#define AHT20_STATUS_BUSY_MASK  (0x1<<AHT20_STATUS_BUSY_SHIFT)
+#define AHT20_STATUS_BUSY(status) ((status & AHT20_STATUS_BUSY_MASK) >> AHT20_STATUS_BUSY_SHIFT)
+
+#define AHT20_STATUS_MODE_SHIFT 5       // bit[6:5] Mode Status
+#define AHT20_STATUS_MODE_MASK  (0x3<<AHT20_STATUS_MODE_SHIFT)
+#define AHT20_STATUS_MODE(status) ((status & AHT20_STATUS_MODE_MASK) >> AHT20_STATUS_MODE_SHIFT)
+
+                                        // bit[4] Reserved
+#define AHT20_STATUS_CALI_SHIFT 3       // bit[3] CAL Enable
+#define AHT20_STATUS_CALI_MASK  (0x1<<AHT20_STATUS_CALI_SHIFT)
+#define AHT20_STATUS_CALI(status) ((status & AHT20_STATUS_CALI_MASK) >> AHT20_STATUS_CALI_SHIFT)
+                                        // bit[2:0] Reserved
+
+#define AHT20_STATUS_RESPONSE_MAX 6
+
+#define AHT20_BAUDRATE             400*1000
+#define AHT20_RESLUTION            (1<<20)  // 2^20
+
+static uint32_t AHT20_Read(uint8_t* buffer, size_t buffLen)
 {
-    uint32_t status = 0;
-    WifiIotI2cIdx id = AHT_I2C_IDX;
-    WifiIotI2cData aht20WriteData ={0};
-    WifiIotI2cData aht20ReadData = { 0 };
-    uint8_t recvData[AHT_REG_ARRAY_INIT_LEN] = { 0 };
-    uint8_t sendData[AHT_SNED_CMD_LEN] = {initCmd, initHighByte, initLowByte};
+    WifiIotI2cData data = { 0 };
+    data.receiveBuf = buffer;
+    data.receiveLen = buffLen;
+    uint32_t retval = I2cRead(AHT20_I2C_IDX, AHT20_READ_ADDR, &data);
+    if (retval != WIFI_IOT_SUCCESS) {
+        printf("I2cRead() failed, %0X!\n", retval);
+        return retval;
+    }
+    return WIFI_IOT_SUCCESS;
+}
 
-    memset(&recvData, 0x0, sizeof(recvData));
-    memset(&aht20ReadData, 0x0, sizeof(WifiIotI2cData));
+static uint32_t AHT20_Write(uint8_t* buffer, size_t buffLen)
+{
+    WifiIotI2cData data = { 0 };
+    data.sendBuf = buffer;
+    data.sendLen = buffLen;
+    uint32_t retval = I2cWrite(AHT20_I2C_IDX, AHT20_WRITE_ADDR, &data);
+    if (retval != WIFI_IOT_SUCCESS) {
+        printf("I2cWrite(%02X) failed, %0X!\n", buffer[0], retval);
+        return retval;
+    }
+    return WIFI_IOT_SUCCESS;
+}
 
-    aht20ReadData.receiveBuf = recvData;
-    aht20ReadData.receiveLen = AHT_REG_ARRAY_INIT_LEN;
-    aht20WriteData.sendBuf = sendData;
-    aht20WriteData.sendLen = AHT_SNED_CMD_LEN;
+// 发送获取状态命令
+static uint32_t AHT20_StatusCommand(void)
+{
+    uint8_t statusCmd[] = { AHT20_CMD_STATUS };
+    return AHT20_Write(statusCmd, sizeof(statusCmd));
+}
 
-    status = I2cRead(id, (AHT_DEVICE_ADDR<<1)|0x01, &aht20ReadData);
-    if (status != WIFI_IOT_SUCCESS) return status;
-    // printf("recvData[0] =0x%x\r\n", recvData[0]);
-    if (((recvData[0] != AHT_DEVICE_CALIBRATION_ERR) && (recvData[0] != AHT_DEVICE_CALIBRATION_ERR_R)) || (recvData[0] == AHT_DEVICE_CALIBRATION)) {
-        // printf("sensor need to calibration\r\n");
-        status = I2cWrite(id, (AHT_DEVICE_ADDR<<1)|0x00, &aht20WriteData);
-        sleep(1);
-        if (status != WIFI_IOT_SUCCESS) {
-            return status;
+// 发送软复位命令
+static uint32_t AHT20_ResetCommand(void)
+{
+    uint8_t resetCmd[] = {AHT20_CMD_RESET};
+    return AHT20_Write(resetCmd, sizeof(resetCmd));
+}
+
+// 发送初始化校准命令
+static uint32_t AHT20_CalibrateCommand(void)
+{
+    uint8_t clibrateCmd[] = {AHT20_CMD_CALIBRATION, AHT20_CMD_CALIBRATION_ARG0, AHT20_CMD_CALIBRATION_ARG1};
+    return AHT20_Write(clibrateCmd, sizeof(clibrateCmd));
+}
+
+// 读取温湿度值之前， 首先要看状态字的校准使能位Bit[3]是否为 1(通过发送0x71可以获取一个字节的状态字)，
+// 如果不为1，要发送0xBE命令(初始化)，此命令参数有两个字节， 第一个字节为0x08，第二个字节为0x00。
+static uint32_t AHT20_Initialize(void)
+{
+    uint32_t retval = 0;
+    uint8_t buffer[AHT20_STATUS_RESPONSE_MAX] = { AHT20_CMD_STATUS };
+    memset(&buffer, 0x0, sizeof(buffer));
+
+    retval = AHT20_StatusCommand();
+    if (retval != WIFI_IOT_SUCCESS) {
+        return retval;
+    }
+
+    retval = AHT20_Read(buffer, sizeof(buffer));
+    if (retval != WIFI_IOT_SUCCESS) {
+        return retval;
+    }
+
+    if (AHT20_STATUS_BUSY(buffer[0])) {
+        retval = AHT20_ResetCommand();
+        usleep(AHT20_STARTUP_TIME);
+        return retval;
+    } else if (!AHT20_STATUS_CALI(buffer[0])) {
+        retval = AHT20_CalibrateCommand();
+        usleep(AHT20_CALIBRATION_TIME);
+        return retval;
+    }
+
+    return WIFI_IOT_SUCCESS;
+}
+
+// 发送 触发测量 命令，开始测量
+uint32_t AHT20_StartMeasure(void)
+{
+    uint8_t triggerCmd[] = {AHT20_CMD_TRIGGER, AHT20_CMD_TRIGGER_ARG0, AHT20_CMD_TRIGGER_ARG1};
+    return AHT20_Write(triggerCmd, sizeof(triggerCmd));
+}
+
+// 接收测量结果，拼接转换为标准值
+uint32_t AHT20_ReadMeasureResult(float* temp, float* humi)
+{
+    uint32_t retval = 0;
+    if (temp == NULL || humi == NULL) {
+        return WIFI_IOT_FAILURE;
+    }
+
+    uint8_t buffer[AHT20_STATUS_RESPONSE_MAX] = { 0 };
+    memset(&buffer, 0x0, sizeof(buffer));
+    retval = AHT20_Read(buffer, sizeof(buffer));  // recv status command result
+    if (retval != WIFI_IOT_SUCCESS) {
+        return retval;
+    }
+
+    for (int i = 0; AHT20_STATUS_BUSY(buffer[0]) && i < 10; i++) {
+        printf("AHT20 device busy, retry %d!\r\n", i);
+        usleep(AHT20_MEASURE_TIME);
+        retval = AHT20_Read(buffer, sizeof(buffer));  // recv status command result
+        if (retval != WIFI_IOT_SUCCESS) {
+            return retval;
         }
     }
 
+    uint32_t humiRaw = buffer[1];
+    humiRaw = (humiRaw << 8) | buffer[2];
+    humiRaw = (humiRaw << 4) | ((buffer[3] & 0xF0) >> 4);
+    *humi = humiRaw / (float)AHT20_RESLUTION * 100;
+
+    uint32_t tempRaw = buffer[3] & 0x0F;
+    tempRaw = (tempRaw << 8) | buffer[4];
+    tempRaw = (tempRaw << 8) | buffer[5];
+    *temp = tempRaw / (float)AHT20_RESLUTION * 200 - 50;
+    // printf("humi: %05X, %f, %05X, %\r\n", humiRaw, *humi, tempRaw, *temp);
     return WIFI_IOT_SUCCESS;
 }
 
-/*发送触犯测量命令*/
-uint32_t aht20_write(uint8_t trigger_cmd, uint8_t high_byte_cmd, uint8_t low_byte_cmd)
+static float ConvertToVoltage(unsigned short data)
 {
-    WifiIotI2cIdx id = AHT_I2C_IDX;
-    WifiIotI2cData aht20WriteData ={0};
-    uint8_t sendData[AHT_SNED_CMD_LEN] = {trigger_cmd, high_byte_cmd, low_byte_cmd};
-
-    aht20WriteData.sendBuf = sendData;
-    aht20WriteData.sendLen = AHT_SNED_CMD_LEN;
-
-    return I2cWrite(id, (AHT_DEVICE_ADDR<<1)|0x00, &aht20WriteData);
-}
-
-/*读取 aht20 serson 数据*/
-uint32_t aht20_read(uint32_t recv_len, uint8_t type)
-{
-    uint32_t status = 0;
-    WifiIotI2cIdx id  = AHT_I2C_IDX;
-    uint8_t recvData[AHT_REG_ARRAY_LEN] = { 0 };
-    WifiIotI2cData aht20ReadData = { 0 };
-    float temper =0;
-    float humi =0;
-    /* Request memory space */
-    memset(&recvData, 0x0, sizeof(recvData));
-    memset(&aht20ReadData, 0x0, sizeof(WifiIotI2cData));
-    aht20ReadData.receiveBuf = recvData;
-    aht20ReadData.receiveLen = recv_len;
-    
-    status = I2cRead(id, (AHT_DEVICE_ADDR<<1)|0x01, &aht20ReadData);
-    if (status != WIFI_IOT_SUCCESS) return status;
-    if (type == AHT_TEMPERATURE) {
-        temper = (float)((recvData[3] &0x0f)<<16 | recvData[4]<<8 |recvData[5]);//温度拼接
-        aht_temp = (temper/AHT_CALCULATION)*200-50;  // T= (S_t/2^20)*200-50
-        return WIFI_IOT_SUCCESS; 
-    } 
-    if (type == AHT_HUMIDITY) {
-        humi = (float)((recvData[1]<<12 | recvData[2]<<4) | ((recvData[3] & 0xf0)>>4));//湿度拼接
-        aht_humi = humi/AHT_CALCULATION*100;
-        return WIFI_IOT_SUCCESS;
-    }
-    return WIFI_IOT_SUCCESS;
+    return (float)data * 1.8 * 4 / 4096;
 }
 
 static void EnvironmentTask(void *arg)
 {
     (void)arg;
-    uint32_t status = 0;
+    uint32_t retval = 0;
+    float humidity = 0.0f;
+    float temperature = 0.0f;
+    float gasSensorResistance = 0.0f;
     static char line[32] = {0};
 
     OledInit();
     OledFillScreen(0);
+    I2cInit(AHT20_I2C_IDX, AHT20_BAUDRATE);
 
     // set BEEP pin as PWM function
     IoSetFunc(BEEP_PIN_NAME, BEEP_PIN_FUNCTION);
@@ -195,41 +266,52 @@ static void EnvironmentTask(void *arg)
         usleep((1000 - BEEP_DURATION) * 1000);
     }
 
-    /*上电等待40ms*/
-    usleep(AHT_DELAY_40MS);//40ms
+    while (WIFI_IOT_SUCCESS != AHT20_Initialize()) {
+        printf("AHT20 sensor init failed!\r\n");
+        usleep(1000);
+    }
+
     while(1) {
-        /*check whethe the sensor  calibration*/
-        while (WIFI_IOT_SUCCESS != ath20_check_and_init(AHT_DEVICE_INIT_CMD, AHT_DEVICE_PARAM_INIT_HIGH, AHT_DEVICE_PARAM_LOW_BYTE)) {
-            // printf("aht20 sensor check init failed!\r\n");
-            usleep(50 * 1000);
+        retval = AHT20_StartMeasure();
+        if (retval != WIFI_IOT_SUCCESS) {
+            printf("trigger measure failed!\r\n");
         }
-        /* on hold master mode*/
-        status = aht20_write(AHT_DEVICE_TEST_CMD, AHT_DEVICE_PARAM_HIGH_BYTE, AHT_DEVICE_PARAM_LOW_BYTE);//tempwerature
-        usleep(AHT_DELAY_100MS);//100ms等待测量完成
-        status = aht20_read(AHT_REG_ARRAY_LEN, AHT_TEMPERATURE);
-        status = aht20_read(AHT_REG_ARRAY_LEN, AHT_HUMIDITY);
-        if (status != WIFI_IOT_SUCCESS) {
-            printf("get humidity data error!\r\n");
+
+        usleep(AHT20_MEASURE_TIME);
+        retval = AHT20_ReadMeasureResult(&temperature, &humidity);
+        if (retval != WIFI_IOT_SUCCESS) {
+            printf("get humidity data failed!\r\n");
         }
 
         unsigned short data = 0;
         if (AdcRead(GAS_SENSOR_CHAN_NAME, &data, WIFI_IOT_ADC_EQU_MODEL_4, WIFI_IOT_ADC_CUR_BAIS_DEFAULT, 0)
                 == WIFI_IOT_SUCCESS) {
-            // ((float)data) / ADC_RESOLUTION;
+            float Vx = ConvertToVoltage(data);
+
+            // Vcc            ADC            GND
+            //  |     ______   |     ______   |
+            //  +---| MG-2 |---+---| 1kom |---+
+            //       ------         ------
+            // 查阅原理图，ADC 引脚位于 1K 电阻和燃气传感器之间，燃气传感器另一端接在 5V 电源正极上
+            // 串联电路电压和阻止成正比：
+            // Vx / 5 == 1kom / (1kom + Rx)
+            //   => Rx + 1 == 5/Vx
+            //   =>  Rx = 5/Vx - 1
+            gasSensorResistance = 5 / Vx - 1;
         }
 
         OledShowString(0, 0, "Sensor values:", 1);
 
-        snprintf(line, sizeof(line), "temp: %.2f", aht_temp);
+        snprintf(line, sizeof(line), "temp: %.2f", temperature);
         OledShowString(0, 1, line, 1);
 
-        snprintf(line, sizeof(line), "humi: %.2f", aht_humi);
+        snprintf(line, sizeof(line), "humi: %.2f", humidity);
         OledShowString(0, 2, line, 1);
 
-        snprintf(line, sizeof(line), "gas: %u", (unsigned)data);
+        snprintf(line, sizeof(line), "gas: %.2f kom", gasSensorResistance);
         OledShowString(0, 3, line, 1);
 
-        usleep(20 * 1000);
+        sleep(2);
     }
 }
 
