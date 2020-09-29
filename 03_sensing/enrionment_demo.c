@@ -176,11 +176,12 @@ static uint32_t AHT20_Initialize(void)
         return retval;
     }
 
-    if (AHT20_STATUS_BUSY(buffer[0])) {
+    if (AHT20_STATUS_BUSY(buffer[0]) || !AHT20_STATUS_CALI(buffer[0])) {
         retval = AHT20_ResetCommand();
+        if (retval != WIFI_IOT_SUCCESS) {
+            return retval;
+        }
         usleep(AHT20_STARTUP_TIME);
-        return retval;
-    } else if (!AHT20_STATUS_CALI(buffer[0])) {
         retval = AHT20_CalibrateCommand();
         usleep(AHT20_CALIBRATION_TIME);
         return retval;
