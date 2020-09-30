@@ -28,8 +28,8 @@
 static_library("solo_demo") {
     sources = [
         "colorful_light_demo.c",
-        # "enrionment_demo.c",
         # "oled_demo.c", "oled_ssd1306.c",
+        # "enrionment_demo.c", "oled_ssd1306.c", "aht20.c"
     ]
 
     include_dirs = [
