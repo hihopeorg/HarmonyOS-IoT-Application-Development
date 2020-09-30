@@ -70,7 +70,7 @@
 
    ```python
        features = [
-           "iothardware:solo_demo",
+           "iothardware:sensing_demo",
        ]
    ```
 
