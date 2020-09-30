@@ -18,7 +18,7 @@
 * 第三讲 [使用Harmony OS控制外设——读取传感器](03_sensing/README.md)
   * Harmony OS ADC相关接口的使用（具体参考`wifiiot_adc.h`中的注释）
   * Harmony OS I2C相关接口的使用（具体参考`wifiiot_i2c.h`中的注释）
-* 第四讲 使用Harmony OS控制WiFi——连接热点、创建热点
+* 第四讲 [使用Harmony OS控制WiFi——连接热点、创建热点](04_wifi/README.md)
 * 第五讲 使用Harmony OS进行网络编程——使用TCP/IP协议
 * 第六讲 使用Harmony OS进行物联网应用开发——使用MQTT、CoAP协议
 

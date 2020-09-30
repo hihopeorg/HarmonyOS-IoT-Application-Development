@@ -25,12 +25,17 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import("//build/lite/config/component/lite_component.gni")
+static_library("wifi_demo") {
+    sources = [
+        "wifi_scan_demo.c",
+    ]
 
-lite_component("app") {
-    features = [
-        # "02_device_control:traffic_light_demo"
-        # "03_sensing:sensing_demo"
-        "04_wifi:wifi_demo"
+    include_dirs = [
+        "//utils/native/lite/include",
+        "//kernel/liteos_m/components/cmsis/2.0",
+        "//base/iot_hardware/interfaces/kits/wifiiot_lite",
+        "//foundation/communication/interfaces/kits/wifi_lite/wifiservice",
     ]
 }
+
+
