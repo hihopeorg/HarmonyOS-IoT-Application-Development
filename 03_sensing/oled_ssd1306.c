@@ -1,3 +1,32 @@
+/*
+ * Copyright (c) 2020, HiHope Community.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ *    contributors may be used to endorse or promote products derived from
+ *    this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include <stddef.h>
 #include <stdio.h>
 #include "oled_ssd1306.h"
@@ -132,34 +161,13 @@ void OledFillScreen(uint8_t fillData)
 }
 
 /**
- * @brief Clear from a location
- * @param fillData: write data to screen register 
- * @param line:write positon start from Y axis 
- * @param pos :write positon start from x axis 
- * @param len:write data len
-*/
-void OledCleanScreen(uint8_t fillData, uint8_t line, uint8_t pos, uint8_t len)
-{
-    uint8_t m = line;
-    uint8_t n = 0;
-
-    WriteCmd(0xb0 + m);
-    WriteCmd(0x00);
-    WriteCmd(0x10);
-
-    for (n = pos; n < len; n++) {
-        WriteData(fillData);
-    }   
-}
-
-/**
  * @brief 8*16 typeface
  * @param x: write positon start from x axis 
  * @param y: write positon start from y axis
  * @param ch: write data
- * @param charSize: select fontsize
+ * @param font: selected font
  */
-void OledShowChar(uint8_t x, uint8_t y, uint8_t ch, uint8_t charSize)
+void OledShowChar(uint8_t x, uint8_t y, uint8_t ch, Font font)
 {      	
 	uint8_t c = 0;
     uint8_t i = 0;
@@ -170,7 +178,7 @@ void OledShowChar(uint8_t x, uint8_t y, uint8_t ch, uint8_t charSize)
         y = y + 2;
     }
 
-    if (charSize == 16) {
+    if (font == FONT8x16) {
         OledSetPosition(x, y);	
         for (i = 0; i < 8; i++){
             WriteData(F8X16[c*16 + i]);
@@ -188,7 +196,7 @@ void OledShowChar(uint8_t x, uint8_t y, uint8_t ch, uint8_t charSize)
     }
 }
 
-void OledShowString(uint8_t x, uint8_t y, const char* str, uint8_t charSize)
+void OledShowString(uint8_t x, uint8_t y, const char* str, Font font)
 {
 	uint8_t j = 0;
     if (str == NULL) {
@@ -197,7 +205,7 @@ void OledShowString(uint8_t x, uint8_t y, const char* str, uint8_t charSize)
     }
 
 	while (str[j]) {
-        OledShowChar(x, y, str[j], charSize);
+        OledShowChar(x, y, str[j], font);
 		x += 8;
 		if (x > 120) {
             x = 0;
