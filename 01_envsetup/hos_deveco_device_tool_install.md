@@ -72,6 +72,8 @@ Node.js 安装过程中提示，“Tools for Native Modules” 界面的复选�
 
 Windows平台的OpenJDK可以在JetBrains下载：https://bintray.com/jetbrains/intellij-jbr/jbrsdk8-windows-x64
 
+或者从红帽下载（有CDN加速，下载速度较快）： https://developers.redhat.com/products/openjdk/download
+
 解压后，配置 JAVA_HOME ，CLASSPATH，PATH 即可；
 
 
