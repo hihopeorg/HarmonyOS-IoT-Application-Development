@@ -1,6 +1,6 @@
 # Harmony OS物联网应用开发实战 第四讲
 
-**本节主要介绍如何使用Hamony OS的WiFi相关编程接口。**
+**本节主要介绍如何在HiSpark WiFi IoT套件上使用Hamony OS的WiFi相关编程接口。**
 
 
 
