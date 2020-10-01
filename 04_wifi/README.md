@@ -27,7 +27,6 @@
 1. 功能相关接口都有`WifiErrorCode`类型的返回值：
 
    * 需要接收并判断返回值是否为`WIFI_SUCCESS`，用于确认是否调用成功；
-
    * 不为`WIFI_SUCCESS`表示失败，通过枚举值查找错误原因；
 
 2. `EnableWifi`接口使能STA模式，`DisableWifi`关闭STA模式；
@@ -37,23 +36,25 @@
 4. 调用`Scan`接口进行扫描之前，
 
    * 需要确保已经调用`EnableWifi`接口，并成功使能了STA模式；
-
-   * 需要通过`RegisterWifiEvent`接口向系统注册扫描状态监听函数，用于获知扫描状态，如扫描动作是否完成等；
-     * `OnWifiScanStateChanged`用于绑定扫描状态监听函数；
-     * 回调函数有两个参数`state`和`size`；
+   * 需要通过`RegisterWifiEvent`接口向系统注册扫描状态监听函数，用于接收扫描状态通知，如扫描动作是否完成等；
+     * `OnWifiScanStateChanged`用于绑定扫描状态监听函数，该回调函数有两个参数`state`和`size`；
      * `state`表示扫描状态，取值为0和1，1表示扫描动作完成；编程时可以与`WifiEventState`枚举值的`WIFI_STATE_NOT_AVALIABLE`，`WIFI_STATE_AVALIABLE`进行比较，避免魔法数字；
      * `size`表示扫描到的热点个数；
 
-5. 扫描状态监听函数内部不能调用`GetScanInfoList`函数；
+5. 扫描状态监听回调函数内，不能直接调用`GetScanInfoList`函数，正确用法：
 
-   * 可以在状态更新回调函数中更新全局状态变量，另外一个线程中轮训状态变量；
-   * 或者，使用信号量进行通知；
+   * 可以在状态更新回调函数中更新全局状态变量，另外一个线程中轮训状态变量，这种方式实现起来比较简单；但需要保证更新和查询操作的原子性（可以使用gcc内置原子操作函数），逻辑才是严格正确的；
+   * 或者使用信号量进行通知，这种方式更好一些，更优雅；
 
 6. 扫描完成后要及时调用`GetScanInfoList`函数获取扫描结果；
 
    * 如果间隔时间太长（例如5秒以上），可能会无法获得上次扫描结果；
 
-   
+7. `GetScanResult`函数有两个第二个参数：
+   * 第一个参数`result`指向用于存放结果的数组，需要大于等于`WIFI_SCAN_HOTSPOT_LIMIT`，
+   * 第二个参数`size`类型为指针是为了内部能够修改它的值，返回后size指向的值是实际搜索到的热点个数；
+   * 调用`GetScanResult`函数前，第二个参数`size`指向的实际值不能为0，否则会包参数错误；
+
 
 
 ## 如何编译
