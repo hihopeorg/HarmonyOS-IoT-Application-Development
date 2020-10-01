@@ -58,14 +58,14 @@ HiSpark WiFi IoT套件，整个套件有一个核心板和七个扩展模块：
 ## 许可与版权
 
 * 本课程所有代码使用[**BSD 3-Clause License**](https://opensource.org/licenses/BSD-3-Clause)许可证发布；
-* 本课程所有文档使用**[CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/)**许可证发布，即《知识共享许可证》的“**署名-非商业性使用-相同方式共享**”版本；
+* 本课程所有文档使用[**CC BY-NC-SA**](https://creativecommons.org/licenses/by-nc-sa/4.0/)许可证发布，即《知识共享许可证》的“**署名-非商业性使用-相同方式共享**”版本；
 
 
 
 ## 反馈与改进
 
 * **问题反馈**
-  * 如果您发现了本项目中的错误或不当之处，可以在项目的issues页面进行反馈：https://gitee.com/hihopeorg/HarmonyOS-IoT-Application-Development/issues
+  * 如果您发现了本项目中的错误或不当之处，可以在本项目的issues页面进行反馈：https://gitee.com/hihopeorg/HarmonyOS-IoT-Application-Development/issues
 
 * **参与改进**
   * 您也可以通过fork本仓，修改后向本仓发起`Pull Request`请求合并；或者使用码云的轻量级PR，直接在本仓修改，修改完发起 PR；
