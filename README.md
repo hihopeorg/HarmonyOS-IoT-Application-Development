@@ -10,8 +10,8 @@
 
 * 第一讲 [从零开始搭建HarmonyOS开发环境](01_envsetup/README.md)
   * [Harmony OS 开发指南——源码下载和编译](01_envsetup/hos_source_code_download_and_compile.md)
-  * [Harmony OS 开发指南——DevEco Device Tool 安装配置](01_envsetup/hos_source_code_download_and_compile.md)
-* 第二讲 [使用Harmony OS控制外设——输入输出](02_device_control/README.md)
+  * [Harmony OS 开发指南——DevEco Device Tool 01_envsetup/hos_deveco_device_tool_install.md
+* 第二讲 [使用Harmony OS控制外设——输入输出](02_device_control/README.md)a
   * Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
   * Harmony OS GPIO相关接口的使用（具体参考`wifiiot_gpio.h`中的注释）
   * Harmony OS PWM相关接口的使用（具体参考`wifiiot_pwm.h`中的注释）
