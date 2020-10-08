@@ -10,6 +10,7 @@
   * 熟悉使用DevEco Device Tool插件进行程序烧录
   * 熟悉串口调试工具sscom的使用
 * 官方文档中控制核心板上LED的演示
+	* 源码路径：`applications/sample/wifi-iot/app/iothardware/led_example.c`
 	* Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
 	  * 线程创建`osThreadNew`
 	* 鸿蒙系统启动注册接口——`ohos_init.h`
