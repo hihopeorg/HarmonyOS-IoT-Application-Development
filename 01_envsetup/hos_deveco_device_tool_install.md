@@ -4,8 +4,9 @@
 
 **坑点总结**：
 
-1. 国内部网络环境下，安装npm包可能会失败，推荐使用淘宝源；
+1. 国内部分网络环境下，安装npm包可能会很慢或者超时，推荐使用国内npm源（如淘宝源、华为源等）；
 2. serialport这个npm包安装的过程中需要编译源码，需要先安装windows-build-tools再安装这个包才会成功；
+3. DevEco Device Tool中打包了预编译的.exe文件，只能在Windows版的VSCode中使用（暂不支持Linux和Mac OS）；
 
 ## 准备环境
 
@@ -70,11 +71,11 @@ Node.js 安装过程中提示，“Tools for Native Modules” 界面的复选�
 
 请自行下载并安装JDK，版本要求为：1.8版本。
 
-Windows平台的OpenJDK可以在JetBrains下载：https://bintray.com/jetbrains/intellij-jbr/jbrsdk8-windows-x64
+Windows版的OpenJDK可以在JetBrains下载：https://bintray.com/jetbrains/intellij-jbr/jbrsdk8-windows-x64
 
 或者从红帽下载（有CDN加速，下载速度较快）： https://developers.redhat.com/products/openjdk/download
 
-解压后，配置 JAVA_HOME ，CLASSPATH，PATH 即可；
+下载压缩包版本可以免安装，解压后配置bin目录到PATH 即可使用（CLASSPATH 可以不配置）；
 
 
 

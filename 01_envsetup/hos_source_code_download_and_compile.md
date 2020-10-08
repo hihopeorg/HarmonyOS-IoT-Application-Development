@@ -86,30 +86,37 @@ sudo apt-get install zip       # 官方文档虽然没有写，但是打包rootf
 使用如下命令，分别下载 gn、ninja、LLVM、hc-gen包，根据官方文档修改，一步到位，不用反复复制粘贴！
 
 ```sh
-# 下载gn/ninja/LLVM/hc-gen包：
+# 下载gn/ninja/LLVM/hc-gen包
 URL_PREFIX=https://repo.huaweicloud.com/harmonyos/compiler
-wget $URL_PREFIX/gn/1523/linux/gn.1523.tar
-wget $URL_PREFIX/ninja/1.9.0/linux/ninja.1.9.0.tar
-wget $URL_PREFIX/clang/9.0.0-34042/linux/llvm-linux-9.0.0-34042.tar
-wget $URL_PREFIX/hc-gen/0.65/linux/hc-gen-0.65-linux.tar
+DOWNLOAD_DIR=~/Downloads                # 下载目录，可自行修改
+TOOLCHAIN_DIR=~/harmonyos/toolchain     # 工具链存放目录，可自行修改
+
+[ -e $DOWNLOAD_DIR ] || mkdir $DOWNLOAD_DIR
+[ -e $TOOLCHAIN_DIR ] || mkdir -p $TOOLCHAIN_DIR
+
+wget -P $DOWNLOAD_DIR $URL_PREFIX/gn/1523/linux/gn.1523.tar
+wget -P $DOWNLOAD_DIR $URL_PREFIX/ninja/1.9.0/linux/ninja.1.9.0.tar
+wget -P $DOWNLOAD_DIR $URL_PREFIX/clang/9.0.0-34042/linux/llvm-linux-9.0.0-34042.tar
+wget -P $DOWNLOAD_DIR $URL_PREFIX/hc-gen/0.65/linux/hc-gen-0.65-linux.tar
 
 # 编译 hi3861 需要 riscv 编译工具链
-wget $URL_PREFIX/gcc_riscv32/7.3.0/linux/gcc_riscv32-linux-7.3.0.tar.gz
+wget -P $DOWNLOAD_DIR $URL_PREFIX/gcc_riscv32/7.3.0/linux/gcc_riscv32-linux-7.3.0.tar.gz
 
 # 解压gn/ninja/LLVM/hc-gen包：
-tar -C ~/ -xvf gn.1523.tar
-tar -C ~/ -xvf ninja.1.9.0.tar
-tar -C ~/ -xvf llvm-linux-9.0.0-34042.tar
-tar -C ~/ -xvf hc-gen-0.65-linux.tar
-tar -C ~/ -xvf gcc_riscv32-linux-7.3.0.tar.gz
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/gn.1523.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/ninja.1.9.0.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/llvm-linux-9.0.0-34042.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/hc-gen-0.65-linux.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/gcc_riscv32-linux-7.3.0.tar.gz
 
 # 向 ~/.bashrc 中追加gn/ninja/LLVM/hc-gen路径配置：
 cat <<EOF >> ~/.bashrc
-export PATH=~/gn:\$PATH
-export PATH=~/ninja:\$PATH
-export PATH=~/llvm/bin:\$PATH
-export PATH=~/hc-gen:\$PATH
-export PATH=~/gcc_riscv32/bin:\$PATH
+TOOLCHAIN_DIR=$TOOLCHAIN_DIR
+export PATH=\$TOOLCHAIN_DIR/gn:\$PATH
+export PATH=\$TOOLCHAIN_DIR/ninja:\$PATH
+export PATH=\$TOOLCHAIN_DIR/llvm/bin:\$PATH
+export PATH=\$TOOLCHAIN_DIR/hc-gen:\$PATH
+export PATH=\$TOOLCHAIN_DIR/gcc_riscv32/bin:\$PATH
 export PATH=~/.local/bin:\$PATH       # 用户pip二进制工具目录
 EOF
 
@@ -153,7 +160,7 @@ pip3 install setuptools kconfiglib
 
 # 安装编译hi3861需要的pip包
 pip3 install scons ecdsa pycryptodome
-pip3 install --upgrade --ignore-installed six
+# pip3 install --upgrade --ignore-installed six
 
 # 可选：将激活脚本添加到 bashrc 中，下次登录默认自动激活此python虚拟环境，可以使用 deactivate 使虚拟环境无效
 cat <<EOF >> ~/.bashrc

@@ -74,7 +74,7 @@ HiSpark WiFi IoT套件，整个套件有一个核心板和七个扩展模块：
 
 ## 支持我们
 
-本课程配套的 HiSpark WiFi IoT 正在火热销售中，您可以只购买核心板，也可以购买各种套件：
+本课程配套的 HiSpark WiFi IoT 套件正在火热销售中，您可以只购买核心板，也可以购买各种套件：
 
 **购买链接**：https://item.taobao.com/item.htm?id=626113480729
 
