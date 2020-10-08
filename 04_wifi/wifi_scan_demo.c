@@ -97,7 +97,7 @@ static void Delay(uint32_t ms)
     usleep((ms * 1000) % usPerTicks);
 }
 
-static void WifiTask(void *arg)
+static void WifiScanTask(void *arg)
 {
     (void)arg;
     WifiErrorCode errCode;
@@ -131,11 +131,11 @@ static void WifiTask(void *arg)
     }
 }
 
-static void WifiDemo(void)
+static void WifiScanDemo(void)
 {
     osThreadAttr_t attr;
 
-    attr.name = "WifiTask";
+    attr.name = "WifiScanTask";
     attr.attr_bits = 0U;
     attr.cb_mem = NULL;
     attr.cb_size = 0U;
@@ -143,10 +143,10 @@ static void WifiDemo(void)
     attr.stack_size = 10240;
     attr.priority = osPriorityNormal;
 
-    if (osThreadNew(WifiTask, NULL, &attr) == NULL) {
-        printf("[WifiDemo] Falied to create WifiTask!\n");
+    if (osThreadNew(WifiScanTask, NULL, &attr) == NULL) {
+        printf("[WifiScanDemo] Falied to create WifiScanTask!\n");
     }
 }
 
-APP_FEATURE_INIT(WifiDemo);
+APP_FEATURE_INIT(WifiScanDemo);
 
