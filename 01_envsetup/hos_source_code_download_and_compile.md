@@ -32,6 +32,10 @@
 
 
 
+**本文所有操作均基于Ubuntu 18.04进行，其他发行版和Ubuntu版本上的命令操作可能不完全一致，但说明的原理可以互通。**
+
+
+
 ## 下载源码
 
 本节介绍如何在Linux主机上下载鸿蒙源码，所有命令均通过远程终端在Linux主机上执行。
@@ -126,7 +130,11 @@ source ~/.bashrc
 
 ### 安装python3.8和pip包管理器
 
-* 安装python3.8和pip（编译鸿蒙源码`hi3861`目标平台需要使用scons，默认安装的scons版本需要python版本>=3.7）：`sudo apt-get install python3.8 python3-pip`，18.04 上默认Python3版本是 3.6，需要将默认python切换为3.7+，通常有两种方式：
+* 安装python3.8和pip（编译鸿蒙源码`hi3861`目标平台需要使用scons，默认安装的scons版本需要python版本>=3.7）：
+
+  * `sudo apt-get install python3.8 python3-pip`
+  
+* 将默认python切换为3.8（因为18.04 上默认Python3版本是 3.6），通常有两种方式切换：
 
   * 使用`virtualenv`管理，单独source相应的active脚本切换当前shell会话的默认python版本（推荐，下面均已这种方式进行操作）；
   * 使用 `update-alternatives`管理，并切换全局Python脚本配置（不推荐，用完需要切换回去，否则会影响apt等依赖python3的软件包使用）；
