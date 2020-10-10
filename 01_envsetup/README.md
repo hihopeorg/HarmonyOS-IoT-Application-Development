@@ -11,6 +11,7 @@
 * Windows系统——源码编辑和烧录环境
 
   * [Harmony OS 开发指南——DevEco Device Tool 安装配置](hos_source_code_download_and_compile.md)
+  * [Harmony OS 开发指南——使用HiBurn烧录固件到开发板](hos_use_hiburn_download_firmware.md)
 
 * Windows主机访问Linux主机
 
