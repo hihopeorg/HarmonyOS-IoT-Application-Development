@@ -71,7 +71,7 @@ Node.js 安装过程中提示，“Tools for Native Modules” 界面的复选�
 
 请自行下载并安装JDK，版本要求为：1.8版本。
 
-Windows版的OpenJDK可以在JetBrains下载：https://bintray.com/jetbrains/intellij-jbr/jbrsdk8-windows-x64
+Windows版的OpenJDK可以在JetBrains下载：https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime
 
 或者从红帽下载（有CDN加速，下载速度较快）： https://developers.redhat.com/products/openjdk/download
 

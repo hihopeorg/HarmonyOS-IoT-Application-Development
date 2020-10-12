@@ -8,27 +8,27 @@
 
 ## 课程目录
 
-* 第一讲 [从零开始搭建HarmonyOS开发环境](01_envsetup/README.md)
+* 第一章 [从零开始搭建HarmonyOS开发环境](01_envsetup/README.md)
   * [Harmony OS 开发指南——源码下载和编译](01_envsetup/hos_source_code_download_and_compile.md)
   * [Harmony OS 开发指南——DevEco Device Tool安装配置](01_envsetup/hos_deveco_device_tool_install.md)
   * [Harmony OS 开发指南——使用HiBurn烧录固件到开发板](01_envsetup/hos_use_hiburn_download_firmware.md)
 
-* 第二讲 [使用Harmony OS控制外设——输入输出](02_device_control/README.md)
+* 第二章 [使用Harmony OS控制外设——输入输出](02_device_control/README.md)
   * Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
   * Harmony OS GPIO相关接口的使用（具体参考`wifiiot_gpio.h`中的注释）
   * Harmony OS PWM相关接口的使用（具体参考`wifiiot_pwm.h`中的注释）
 
-* 第三讲 [使用Harmony OS控制外设——读取传感器](03_sensing/README.md)
+* 第三章 [使用Harmony OS控制外设——读取传感器](03_sensing/README.md)
   * Harmony OS ADC相关接口的使用（具体参考`wifiiot_adc.h`中的注释）
   * Harmony OS I2C相关接口的使用（具体参考`wifiiot_i2c.h`中的注释）
   
-* 第四讲 [使用Harmony OS控制WiFi——连接热点、创建热点](04_wifi/README.md)
+* 第四章 [使用Harmony OS控制WiFi——连接热点、创建热点](04_wifi/README.md)
 
-* 第五讲 使用Harmony OS进行网络编程——使用TCP/IP协议
+* 第五章 使用Harmony OS进行网络编程——使用TCP/IP协议
 
-* 第六讲 使用Harmony OS进行物联网应用开发——使用MQTT、CoAP协议
+* 第六章 使用Harmony OS进行物联网应用开发——使用MQTT、CoAP协议
 
-* 第七讲 Harmony OS IoT设备系统编程精要——基于CMSIS API v2讲解
+* 第七章 Harmony OS IoT设备系统编程精要——基于CMSIS API v2
 
 
 

@@ -1,4 +1,4 @@
-# Harmony OS物联网应用开发实战 第四讲
+# Harmony OS物联网应用开发实战 第四章
 
 **本节主要介绍如何在HiSpark WiFi IoT套件上使用Hamony OS的WiFi相关编程接口。**
 
@@ -61,7 +61,7 @@
 
 有两种方法可以编译此目录下的样例程序：
 
-1. 前两讲中的方法——将当前目录下的`*.c`文件和`BUILD.gn`拷贝到openharmony源码的`applications\sample\wifi-iot\app\iothardware`目录下；
+1. 前两章中的方法——将当前目录下的`*.c`文件和`BUILD.gn`拷贝到openharmony源码的`applications\sample\wifi-iot\app\iothardware`目录下；
 
    1. 再修改openharmony源码的`applications\sample\wifi-iot\app\BUILD.gn`文件，将其中的 `features` 改为：`iothardware:wifi_demo`；
    2. 再修改`applications\sample\wifi-iot\app\iothardware\BUILD.gn`文件，决定需要编译哪个`.c`文件；
