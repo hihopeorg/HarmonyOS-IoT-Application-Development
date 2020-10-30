@@ -49,13 +49,14 @@ static const uint16_t g_tuneFreqs[] = {
     25511, // 1568
     22728, // 1760
     20249, // 1975.5
+    51021 // 5_ 783.99 // 第一个八度的 5
 };
 
 // 曲谱音符
 static const uint8_t g_scoreNotes[] = {
     // 《两只老虎》简谱：http://www.jianpu.cn/pu/33/33945.htm
     1, 2, 3, 1,        1, 2, 3, 1,        3, 4, 5,  3, 4, 5,
-    5, 6, 5, 4, 3, 1,  5, 6, 5, 4, 3, 1,  1, 5, 1,  1, 5, 1, // 最后两个 5 应该是低八度的，链接图片中的曲谱不对，声音到最后听起来不太对劲
+    5, 6, 5, 4, 3, 1,  5, 6, 5, 4, 3, 1,  1, 8, 1,  1, 8, 1, // 最后两个 5 应该是低八度的，链接图片中的曲谱不对，声音到最后听起来不太对劲
 };
 
 // 曲谱时值
@@ -69,9 +70,6 @@ static void *BeeperMusicTask(const char *arg)
     (void)arg;
 
     printf("BeeperMusicTask start!\r\n");
-    while (!g_buttonPressed) {
-        osDelay(1);
-    }
 
     hi_pwm_set_clock(PWM_CLK_XTAL); // 设置时钟源为晶体时钟（40MHz，默认时钟源160MHz）
 
@@ -88,24 +86,11 @@ static void *BeeperMusicTask(const char *arg)
     return NULL;
 }
 
-static void OnButtonPressed(char *arg)
-{
-    (void) arg;
-    g_buttonPressed = 1;
-}
-
 static void StartBeepMusicTask(void)
 {
     osThreadAttr_t attr;
 
     GpioInit();
-
-    // 按键引脚 设置为GPIO功能 并注册按键中断处理函数
-    IoSetFunc(WIFI_IOT_IO_NAME_GPIO_8, WIFI_IOT_IO_FUNC_GPIO_8_GPIO);
-    GpioSetDir(WIFI_IOT_IO_NAME_GPIO_8, WIFI_IOT_GPIO_DIR_IN);
-    IoSetPull(WIFI_IOT_IO_NAME_GPIO_8, WIFI_IOT_IO_PULL_UP);
-    GpioRegisterIsrFunc(WIFI_IOT_IO_NAME_GPIO_8, WIFI_IOT_INT_TYPE_EDGE, WIFI_IOT_GPIO_EDGE_FALL_LEVEL_LOW,
-        OnButtonPressed, NULL);
 
     // 蜂鸣器引脚 设置为 PWM功能
     IoSetFunc(WIFI_IOT_IO_NAME_GPIO_9, WIFI_IOT_IO_FUNC_GPIO_9_PWM0_OUT);
@@ -126,4 +111,4 @@ static void StartBeepMusicTask(void)
     }
 }
 
-APP_FEATURE_INIT(StartBeepMusicTask);
+SYS_RUN(StartBeepMusicTask);
