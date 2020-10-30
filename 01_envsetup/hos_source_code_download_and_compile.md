@@ -59,7 +59,7 @@ source ~/.bashrc
 
 ```sh
 mkdir -p ~/harmonyos/openharmony && cd ~/harmonyos/openharmony
-sudo apt install git python # repo工具本身是python脚本，它会调用git命令下载单个代码仓
+sudo apt install --no-install-recommends git python # repo工具本身是python脚本，它会调用git命令下载单个代码仓
 # 开始前需要配置`user.name`和`user.email`，如果没有配置，使用如下命令进行配置：
 # git config --global user.name "yourname"
 # git config --global user.email "your-email-address"
@@ -83,6 +83,8 @@ repo sync -c  # 以后每天同步远程仓的修改，只需要执行这一条�
 ```sh
 sudo apt-get install dosfstools mtools  # 官方文档说明的两个文件系统打包工具
 sudo apt-get install zip       # 官方文档虽然没有写，但是打包rootfs过程中需要使用
+sudo apt install mtd-utils     # 3518需要打包 jffs2 镜像的mkfs.jffs2 命令，需要安装这个包
+sudo apt install build-essential # 安装gcc/g++/make等工具，ffmpeg的测试过程中需要使用链接器ld，需要这个包
 ```
 
 ###  下载、配置编译工具链
@@ -132,7 +134,7 @@ source ~/.bashrc
 
 * 安装python3.8和pip（编译鸿蒙源码`hi3861`目标平台需要使用scons，默认安装的scons版本需要python版本>=3.7）：
 
-  * `sudo apt-get install python3.8 python3-pip`
+  * `sudo apt-get install --no-install-recommends python3.8 python3-pip`
   
 * 将默认python切换为3.8（因为18.04 上默认Python3版本是 3.6），通常有两种方式切换：
 
