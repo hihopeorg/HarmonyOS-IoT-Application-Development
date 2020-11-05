@@ -89,14 +89,6 @@ void OnWifiScanStateChanged(int state, int size)
     }
 }
 
-static void Delay(uint32_t ms)
-{
-    uint32_t usPerTicks = (1000*1000) / osKernelGetTickFreq();
-    // printf("usPerTicks: %d\r\n", usPerTicks);
-    osDelay((ms * 1000) / usPerTicks);
-    usleep((ms * 1000) % usPerTicks);
-}
-
 static void WifiScanTask(void *arg)
 {
     (void)arg;
@@ -113,7 +105,7 @@ static void WifiScanTask(void *arg)
     while (1) {
         errCode = EnableWifi();
         printf("EnableWifi: %d\r\n", errCode);
-        Delay(100);
+        osDelay(100);
 
         g_scanDone = 0;
         errCode = Scan();
@@ -127,7 +119,7 @@ static void WifiScanTask(void *arg)
 
         errCode = DisableWifi();
         printf("DisableWifi: %d\r\n", errCode);
-        Delay(500);
+        osDelay(500);
     }
 }
 

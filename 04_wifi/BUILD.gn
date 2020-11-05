@@ -27,8 +27,9 @@
 
 static_library("wifi_demo") {
     sources = [
-        "wifi_scan_demo.c",
-        # "wifi_connect_demo.c",
+        # "wifi_scan_demo.c",
+        "wifi_connect_demo.c",
+        #"wifi_hotspot_demo.c",
     ]
 
     include_dirs = [
@@ -36,7 +37,6 @@ static_library("wifi_demo") {
         "//kernel/liteos_m/components/cmsis/2.0",
         "//base/iot_hardware/interfaces/kits/wifiiot_lite",
         "//foundation/communication/interfaces/kits/wifi_lite/wifiservice",
-        # "//third_party/lwip/src/include",
         "//vendor/hisi/hi3861/hi3861/third_party/lwip_sack/include/",
     ]
 }

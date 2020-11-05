@@ -38,24 +38,6 @@
 #include "lwip/netifapi.h"
 #include "lwip/api_shell.h"
 
-// static char* SecurityTypeName(WifiSecurityType type)
-// {
-//     switch (type)
-//     {
-//     case WIFI_SEC_TYPE_OPEN:
-//         return "OPEN";
-//     case WIFI_SEC_TYPE_WEP:
-//         return "WEP";
-//     case WIFI_SEC_TYPE_PSK:
-//         return "PSK";
-//     case WIFI_SEC_TYPE_SAE:
-//         return "SAE";
-//     default:
-//         break;
-//     }
-//     return "unkow";
-// }
-
 static void PrintLinkedInfo(WifiLinkedInfo* info)
 {
     if (!info) return;
@@ -88,14 +70,6 @@ static void OnWifiScanStateChanged(int state, int size)
     printf("%s %d, state = %X, size = %d\r\n", __FUNCTION__, __LINE__, state, size);
 }
 
-static void Delay(uint32_t ms)
-{
-    uint32_t usPerTicks = (1000*1000) / osKernelGetTickFreq();
-    // printf("usPerTicks: %d\r\n", usPerTicks);
-    osDelay((ms * 1000) / usPerTicks);
-    usleep((ms * 1000) % usPerTicks);
-}
-
 static void WifiConnectTask(void *arg)
 {
     (void)arg;
@@ -107,7 +81,7 @@ static void WifiConnectTask(void *arg)
     WifiDeviceConfig apConfig = {};
     int netId = -1;
 
-    Delay(10);
+    osDelay(10);
     errCode = RegisterWifiEvent(&eventListener);
     printf("RegisterWifiEvent: %d\r\n", errCode);
 
@@ -119,7 +93,7 @@ static void WifiConnectTask(void *arg)
     while (1) {
         errCode = EnableWifi();
         printf("EnableWifi: %d\r\n", errCode);
-        Delay(100);
+        osDelay(10);
 
         errCode = AddDeviceConfig(&apConfig, &netId);
         printf("AddDeviceConfig: %d\r\n", errCode);
@@ -129,10 +103,10 @@ static void WifiConnectTask(void *arg)
         printf("ConnectTo(%d): %d\r\n", netId, errCode);
 
         while (!g_connected) {
-            Delay(10);
+            osDelay(10);
         }
         printf("g_connected: %d\r\n", g_connected);
-        Delay(3000);
+        osDelay(50);
 
         // 联网业务开始
         // 这里是网络业务代码...
@@ -141,12 +115,12 @@ static void WifiConnectTask(void *arg)
             err_t ret = netifapi_dhcp_start(iface);
             printf("netifapi_dhcp_start: %d\r\n", ret);
 
-            Delay(2000); // wait DHCP server give me IP
+            osDelay(200); // wait DHCP server give me IP
             ret = netifapi_netif_common(iface, dhcp_clients_info_show, NULL);
             printf("netifapi_netif_common: %d\r\n", ret);
         }
 
-
+        osDelay(800);
         // 联网业务结束
 
         Disconnect(); // disconnect with your AP
@@ -155,7 +129,7 @@ static void WifiConnectTask(void *arg)
 
         errCode = DisableWifi();
         printf("DisableWifi: %d\r\n", errCode);
-        Delay(500);
+        osDelay(200);
     }
 }
 
