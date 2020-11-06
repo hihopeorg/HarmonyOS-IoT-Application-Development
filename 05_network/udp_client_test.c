@@ -26,28 +26,49 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef NET_DEMO_COMMON_H
-#define NET_DEMO_COMMON_H
-
+#include <errno.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
-void NetDemoTest(unsigned short port, const char* host);
+#include "udp_client_test.h"
+#include "net_common.h"
 
-const char* GetNetDemoName(void);
+static char request[] = "Hello.";
+static char response[128] = "";
 
-#define IMPL_GET_NET_DEMO_NAME(testFunc) \
-    const char* GetNetDemoName() { \
-        static const char* demoName = #testFunc; \
-        return demoName; \
+void UdpClientTest(const char* host, unsigned short port)
+{
+    ssize_t retval = 0;
+    int sockfd = socket(AF_INET, SOCK_DGRAM, 0); // UDP socket
+
+    struct sockaddr_in toAddr = {0};
+    toAddr.sin_family = AF_INET;
+    toAddr.sin_port = htons(port);
+    if (inet_pton(AF_INET, host, &toAddr.sin_addr) <= 0) {
+        printf("inet_pton failed!\r\n");
+        goto do_cleanup;
     }
 
-#define CLIENT_TEST_DEMO(testFunc) \
-    void NetDemoTest(unsigned short port, const char* host) { \
-        (void) host; \
-        printf("%s start\r\n", #testFunc); \
-        testFunc(host, port); \
-        printf("%s done!\r\n", #testFunc); \
-    } \
-    IMPL_GET_NET_DEMO_NAME(testFunc)
+    retval = sendto(sockfd, request, sizeof(request), 0, (struct sockaddr *)&toAddr, sizeof(toAddr));
+    if (retval < 0) {
+        printf("sendto failed!\r\n");
+        goto do_cleanup;
+    }
+    printf("send UDP message {%s} %ld done!\r\n", request, retval);
 
-#endif // NET_DEMO_COMMON_H
+    struct sockaddr_in fromAddr = {0};
+    socklen_t fromLen = sizeof(fromAddr);
+    retval = recvfrom(sockfd, &response, sizeof(response), 0, (struct sockaddr *)&fromAddr, &fromLen);
+    if (retval <= 0) {
+        printf("recvfrom failed or abort, %ld, %d!\r\n", retval, errno);
+        goto do_cleanup;
+    }
+    response[retval] = '\0';
+    printf("recv UDP message {%s} %ld done!\r\n", response, retval);
+    printf("peer info: ipaddr = %s, port = %d\r\n", inet_ntoa(fromAddr.sin_addr), ntohs(fromAddr.sin_port));
+
+do_cleanup:
+    printf("do_cleanup...\r\n");
+    close(sockfd);
+}

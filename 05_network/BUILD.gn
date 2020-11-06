@@ -29,15 +29,12 @@ static_library("net_demo") {
     sources = [
         "net_demo_ohos.c", "wifi_connecter.c",
         "tcp_client_demo.c", "tcp_client_test.c",
-        # "tcp_server_demo.c", "tcp_server_test.c",
         # "udp_client_demo.c", "udp_client_test.c",
-        # "udp_server_demo.c", "udp_server_test.c",
     ]
 
     include_dirs = [
         "//utils/native/lite/include",
         "//kernel/liteos_m/components/cmsis/2.0",
-        "//base/iot_hardware/interfaces/kits/wifiiot_lite",
         "//foundation/communication/interfaces/kits/wifi_lite/wifiservice",
         "//vendor/hisi/hi3861/hi3861/third_party/lwip_sack/include/",
     ]
