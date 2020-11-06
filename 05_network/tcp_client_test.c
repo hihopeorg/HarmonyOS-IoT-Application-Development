@@ -26,7 +26,51 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "net_demo_common.h"
-#include "tcp_client_test.h"
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
-CLIENT_TEST_DEMO(TcpClientTest);
+#include "tcp_client_test.h"
+#include "net_common.h"
+
+static char request[] = "Hello";
+static char response[128] = "";
+
+void TcpClientTest(const char* host, unsigned short port)
+{
+    ssize_t retval = 0;
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0); // TCP socket
+
+    struct sockaddr_in serverAddr = {0};
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(port);
+    if (inet_pton(AF_INET, host, &serverAddr.sin_addr) <= 0) {
+        printf("inet_pton failed!\r\n");
+        goto do_cleanup;
+    }
+
+    if (connect(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0) {
+        printf("connect failed!\r\n");
+        goto do_cleanup;
+    }
+    printf("connect to server %s success!\r\n", host);
+
+    retval = send(sockfd, request, sizeof(request), 0);
+    if (retval < 0) {
+        printf("send request failed!\r\n");
+        goto do_cleanup;
+    }
+    printf("send request{%s} %ld to server done!\r\n", request, retval);
+
+    retval = recv(sockfd, &response, sizeof(response), 0);
+    if (retval <= 0) {
+        printf("send response from server failed or done, %ld!\r\n", retval);
+        goto do_cleanup;
+    }
+    response[retval] = '\0';
+    printf("recv response{%s} %ld from server done!\r\n", response, retval);
+
+do_cleanup:
+    printf("do_cleanup...\r\n");
+    close(sockfd);
+}

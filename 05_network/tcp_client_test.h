@@ -26,7 +26,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "net_demo_common.h"
-#include "tcp_client_test.h"
+#ifndef TCP_CLIENT_TEST_H
+#define TCP_CLIENT_TEST_H
 
-CLIENT_TEST_DEMO(TcpClientTest);
+void TcpClientTest(const char* host, unsigned short port);
+
+#endif // TCP_CLIENT_TEST_H

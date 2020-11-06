@@ -27,9 +27,11 @@
 
 static_library("net_demo") {
     sources = [
-        "tcp_client_demo.c",
-        # "tcp_server_demo.c",
-        "wifi_connecter.c",
+        "net_demo_ohos.c", "wifi_connecter.c",
+        "tcp_client_demo.c", "tcp_client_test.c",
+        # "tcp_server_demo.c", "tcp_server_test.c",
+        # "udp_client_demo.c", "udp_client_test.c",
+        # "udp_server_demo.c", "udp_server_test.c",
     ]
 
     include_dirs = [

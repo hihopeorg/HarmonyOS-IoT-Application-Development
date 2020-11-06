@@ -26,7 +26,18 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "net_demo_common.h"
-#include "tcp_client_test.h"
+#ifndef NET_COMMON_H
+#define NET_COMMON_H
 
-CLIENT_TEST_DEMO(TcpClientTest);
+#if defined(__linux__)
+#include <stdlib.h>  // for atoi
+#include <sys/types.h>  // for AF_INET SOCK_STREAM
+#include <sys/socket.h> // for socket
+#include <netinet/in.h> // for sockaddr_in
+#include <arpa/inet.h> // for inet_pton
+#else  // __linux__
+#include "lwip/sockets.h"
+#define close(fd) lwip_close(fd)
+#endif  // __linux__
+
+#endif  // NET_COMMON_H

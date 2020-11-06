@@ -26,7 +26,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "net_demo_common.h"
-#include "tcp_client_test.h"
+#ifndef NET_PARAMS_H
+#define NET_PARAMS_H
 
-CLIENT_TEST_DEMO(TcpClientTest);
+#define PARAM_HOTSPOT_SSID "ABCD"   // your AP SSID
+#define PARAM_HOTSPOT_PSK  "12345678"  // your AP PSK
+
+#define PARAM_HOTSPOT_TYPE WIFI_SEC_TYPE_PSK // defined in wifi_device_config.h
+
+#define PARAM_SERVER_ADDR "10.20.16.36" // your PC IP address
+#define PARAM_SERVER_PORT 5678
+
+#endif  // NET_PARAMS_H
