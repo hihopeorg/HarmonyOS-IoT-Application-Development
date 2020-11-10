@@ -31,6 +31,10 @@ lite_component("app") {
     features = [
         # "02_device_control:traffic_light_demo"
         # "03_sensing:sensing_demo"
-        "04_wifi:wifi_demo"
+        # "04_wifi:wifi_demo"
+        "05_network:net_demo"
     ]
+    if (board_name != "hi3861v100") {
+        target_type = "executable"
+    }
 }

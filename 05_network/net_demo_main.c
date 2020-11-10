@@ -26,32 +26,17 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef NET_COMMON_H
-#define NET_COMMON_H
+#include <stdio.h>
+#include <stdlib.h>
+#include "net_params.h"
+#include "net_demo_common.h"
 
-// __arm__ and __aarch64__ for HarmonyOS with liteos-a kernel, __i386__ and __x86_64__ for Unix like OS
-#if defined(__arm__) || defined(__aarch64__) || defined(__i386__) || defined(__x86_64__)
-#define HAVE_BSD_SOCKET 1
-#else
-#define HAVE_BSD_SOCKET 0
-#endif
+int main(int argc, char* argv[])
+{
+    short port = argc > 1 ? atoi(argv[1]) : PARAM_SERVER_PORT;
+    char* host = argc > 2 ? argv[2] : PARAM_SERVER_ADDR;
 
-#if defined(__riscv) // for wifiiot(HarmonyOS on Hi3861 with liteos-m kernel)
-#define HAVE_LWIP_SOCKET 1
-#else
-#define HAVE_LWIP_SOCKET 0
-#endif
-
-#if HAVE_BSD_SOCKET
-#include <sys/types.h>  // for AF_INET SOCK_STREAM
-#include <sys/socket.h> // for socket
-#include <netinet/in.h> // for sockaddr_in
-#include <arpa/inet.h> // for inet_pton
-#elif HAVE_LWIP_SOCKET
-#include "lwip/sockets.h"
-#define close(fd) lwip_close(fd)
-#else
-#error "Unknow platform!"
-#endif
-
-#endif  // NET_COMMON_H
+    printf("%s start, port = %d, host = %s...\n", GetNetDemoName(), port, host);
+    NetDemoTest(port, host);
+    return 0;
+}

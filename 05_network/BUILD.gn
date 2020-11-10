@@ -27,17 +27,21 @@
 
 static_library("net_demo") {
     sources = [
-        "net_demo_ohos.c", "wifi_connecter.c",
         "tcp_client_demo.c", "tcp_client_test.c",
         # "udp_client_demo.c", "udp_client_test.c",
     ]
 
-    include_dirs = [
-        "//utils/native/lite/include",
-        "//kernel/liteos_m/components/cmsis/2.0",
-        "//foundation/communication/interfaces/kits/wifi_lite/wifiservice",
-        "//vendor/hisi/hi3861/hi3861/third_party/lwip_sack/include/",
-    ]
+    include_dirs = ["."]
+    if (board_name == "hi3861v100") {
+        sources += ["net_demo_ohos.c", "wifi_connecter.c"]
+        include_dirs += [
+            "//utils/native/lite/include",
+            "//kernel/liteos_m/components/cmsis/2.0",
+            "//foundation/communication/interfaces/kits/wifi_lite/wifiservice",
+            "//vendor/hisi/hi3861/hi3861/third_party/lwip_sack/include/",
+        ]
+    } else {
+        sources += ["net_demo_main.c"]
+    }
 }
-
 
