@@ -25,8 +25,7 @@
     * 添加samba账号并设置密码：`sudo smbpasswd -a $USER`（其中$USER为用户名），
     * 修改配置（修改完需要重启服务`sudo service smbd restart`）：
 
-    ~~~ini
-      ```ini
+    ```ini
       [home]
         comment = User Homes
         path = /home
@@ -35,8 +34,7 @@
         guest ok = no
         read only = no
         create mask = 0755
-      ```
-    ~~~
+    ```
 
   * 如果是VirtualBox里面安装的Linux
 
