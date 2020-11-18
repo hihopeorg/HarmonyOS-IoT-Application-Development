@@ -34,7 +34,4 @@ lite_component("app") {
         # "04_wifi:wifi_demo"
         "05_network:net_demo"
     ]
-    if (board_name != "hi3861v100") {
-        target_type = "executable"
-    }
 }

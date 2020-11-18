@@ -25,23 +25,64 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+if (board_name == "hi3861v100") {
+
 static_library("net_demo") {
-    sources = [
-        "tcp_client_demo.c", "tcp_client_test.c",
-        # "udp_client_demo.c", "udp_client_test.c",
-    ]
+    # sources = ["tcp_client_demo.c", "tcp_client_test.c"]
+    # sources = ["tcp_server_demo.c", "tcp_server_test.c"]
+    sources = ["udp_client_demo.c", "udp_client_test.c"]
+    # sources = ["udp_server_demo.c", "udp_server_test.c"]
 
     include_dirs = ["."]
     if (board_name == "hi3861v100") {
-        sources += ["net_demo_ohos.c", "wifi_connecter.c"]
+        sources += ["net_demo_iot.c", "wifi_connecter.c"]
         include_dirs += [
             "//utils/native/lite/include",
             "//kernel/liteos_m/components/cmsis/2.0",
             "//foundation/communication/interfaces/kits/wifi_lite/wifiservice",
             "//vendor/hisi/hi3861/hi3861/third_party/lwip_sack/include/",
+            "//vendor/winnermicro/w800/src/network/lwip2.0.3/include/",
         ]
-    } else {
-        sources += ["net_demo_main.c"]
     }
+}
+
+} else { # for hi3516dv300 and hi3518ev300
+
+tcp_client_srcs = ["tcp_client_demo.c", "tcp_client_test.c"]
+tcp_server_srcs = ["tcp_server_demo.c", "tcp_server_test.c"]
+udp_client_srcs = ["udp_client_demo.c", "udp_client_test.c"]
+udp_server_srcs = ["udp_server_demo.c", "udp_server_test.c"]
+
+common_sources = ["net_demo_main.c"]
+
+executable("tcp_client_test") {
+    sources = common_sources
+    sources += tcp_client_srcs
+}
+
+executable("tcp_server_test") {
+    sources = common_sources
+    sources += tcp_server_srcs
+}
+
+executable("udp_client_test") {
+    sources = common_sources
+    sources += udp_client_srcs
+}
+
+executable("udp_server_test") {
+    sources = common_sources
+    sources += udp_server_srcs
+}
+
+group("net_demo") {
+    deps = [
+        ":tcp_client_test",
+        ":tcp_server_test",
+        ":udp_client_test",
+        ":udp_server_test",
+    ]
+}
+
 }
 

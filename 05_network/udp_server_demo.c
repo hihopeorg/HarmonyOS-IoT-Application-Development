@@ -26,37 +26,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef NET_DEMO_COMMON_H
-#define NET_DEMO_COMMON_H
+#include "net_params.h"
+#include "net_demo_common.h"
+#include "udp_server_test.h"
 
-#include <stdio.h>
-
-void NetDemoTest(unsigned short port, const char* host);
-
-const char* GetNetDemoName(void);
-
-#define IMPL_GET_NET_DEMO_NAME(testFunc) \
-    const char* GetNetDemoName() { \
-        static const char* demoName = #testFunc; \
-        return demoName; \
-    }
-
-#define CLIENT_TEST_DEMO(testFunc) \
-    void NetDemoTest(unsigned short port, const char* host) { \
-        (void) host; \
-        printf("%s start\r\n", #testFunc); \
-        testFunc(host, port); \
-        printf("%s done!\r\n", #testFunc); \
-    } \
-    IMPL_GET_NET_DEMO_NAME(testFunc)
-
-#define SERVER_TEST_DEMO(testFunc) \
-    void NetDemoTest(unsigned short port, const char* host) { \
-        (void) host; \
-        printf("%s start\r\n", #testFunc); \
-        testFunc(port); \
-        printf("%s done!\r\n", #testFunc); \
-    } \
-    IMPL_GET_NET_DEMO_NAME(testFunc)
-
-#endif // NET_DEMO_COMMON_H
+SERVER_TEST_DEMO(UdpServerTest);
