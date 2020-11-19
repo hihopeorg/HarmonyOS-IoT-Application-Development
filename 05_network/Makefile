@@ -1,12 +1,12 @@
 CC := gcc
 CFLAGS := -Wall
 
-COMMON_SRCS := net_demo_main.c
+COMMON_SRCS := demo_entry_posix.c
 
-TCP_CLIENT_SRCS := tcp_client_demo.c tcp_client_test.c
-TCP_SERVER_SRCS := tcp_server_demo.c tcp_server_test.c
-UDP_CLIENT_SRCS := udp_client_demo.c udp_client_test.c
-UDP_SERVER_SRCS := udp_server_demo.c udp_server_test.c
+TCP_CLIENT_SRCS := tcp_client_test.c
+TCP_SERVER_SRCS := tcp_server_test.c
+UDP_CLIENT_SRCS := udp_client_test.c
+UDP_SERVER_SRCS := udp_server_test.c
 
 TCP_CLIENT_TARGET := tcp_client_test
 TCP_SERVER_TARGET := tcp_server_test

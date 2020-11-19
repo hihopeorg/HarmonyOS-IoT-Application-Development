@@ -26,9 +26,39 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef UDP_SERVER_TEST_H
-#define UDP_SERVER_TEST_H
+#ifndef NET_DEMO_COMMON_H
+#define NET_DEMO_COMMON_H
 
-void UdpServerTest(unsigned short port);
+#include <stdio.h>
 
-#endif // UDP_SERVER_TEST_H
+void NetDemoTest(unsigned short port, const char* host);
+
+const char* GetNetDemoName(void);
+
+#define IMPL_GET_NET_DEMO_NAME(testFunc) \
+    const char* GetNetDemoName() { \
+        static const char* demoName = #testFunc; \
+        return demoName; \
+    }
+
+#define CLIENT_TEST_DEMO(testFunc) \
+    void NetDemoTest(unsigned short port, const char* host) { \
+        (void) host; \
+        printf("%s start\r\n", #testFunc); \
+        printf("I will connect to %s:%d\r\n", host, port); \
+        testFunc(host, port); \
+        printf("%s done!\r\n", #testFunc); \
+    } \
+    IMPL_GET_NET_DEMO_NAME(testFunc)
+
+#define SERVER_TEST_DEMO(testFunc) \
+    void NetDemoTest(unsigned short port, const char* host) { \
+        (void) host; \
+        printf("%s start\r\n", #testFunc); \
+        printf("I will listen on :%d\r\n", port); \
+        testFunc(port); \
+        printf("%s done!\r\n", #testFunc); \
+    } \
+    IMPL_GET_NET_DEMO_NAME(testFunc)
+
+#endif // NET_DEMO_COMMON_H

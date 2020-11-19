@@ -30,7 +30,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "tcp_client_test.h"
+#include "net_demo.h"
 #include "net_common.h"
 
 static char request[] = "Hello";
@@ -76,3 +76,5 @@ do_cleanup:
     printf("do_cleanup...\r\n");
     close(sockfd);
 }
+
+CLIENT_TEST_DEMO(TcpClientTest);

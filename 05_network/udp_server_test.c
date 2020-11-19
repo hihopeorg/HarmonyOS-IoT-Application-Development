@@ -32,7 +32,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "udp_server_test.h"
+#include "net_demo.h"
 #include "net_common.h"
 
 static char message[128] = "";
@@ -75,3 +75,5 @@ do_cleanup:
 
     close(sockfd);
 }
+
+SERVER_TEST_DEMO(UdpServerTest);

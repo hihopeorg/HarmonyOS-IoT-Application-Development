@@ -73,6 +73,8 @@ static WifiEvent g_defaultWifiEventListener = {
 
 static struct netif* g_iface = NULL;
 
+err_t netifapi_set_hostname(struct netif *netif, char *hostname, u8_t namelen);
+
 int ConnectToHotspot(WifiDeviceConfig* apConfig)
 {
     WifiErrorCode errCode;
@@ -98,12 +100,31 @@ int ConnectToHotspot(WifiDeviceConfig* apConfig)
 
     g_iface = netifapi_netif_find("wlan0");
     if (g_iface) {
-        err_t ret = netifapi_dhcp_start(g_iface);
+        err_t ret = 0;
+        char* hostname = "hispark";
+        ret = netifapi_set_hostname(g_iface, hostname, strlen(hostname));
+        printf("netifapi_set_hostname: %d\r\n", ret);
+
+        ret = netifapi_dhcp_start(g_iface);
         printf("netifapi_dhcp_start: %d\r\n", ret);
 
         osDelay(100); // wait DHCP server give me IP
+#if 1
         ret = netifapi_netif_common(g_iface, dhcp_clients_info_show, NULL);
         printf("netifapi_netif_common: %d\r\n", ret);
+#else
+        // 下面这种方式也可以打印 IP、网关、子网掩码信息
+        ip4_addr_t ip = {0};
+        ip4_addr_t netmask = {0};
+        ip4_addr_t gw = {0};
+        ret = netifapi_netif_get_addr(g_iface, &ip, &netmask, &gw);
+        if (ret == ERR_OK) {
+            printf("ip = %s\r\n", ip4addr_ntoa(&ip));
+            printf("netmask = %s\r\n", ip4addr_ntoa(&netmask));
+            printf("gw = %s\r\n", ip4addr_ntoa(&gw));
+        }
+        printf("netifapi_netif_get_addr: %d\r\n", ret);
+#endif
     }
     return netId;
 }

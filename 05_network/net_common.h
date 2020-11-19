@@ -49,7 +49,9 @@
 #include <arpa/inet.h> // for inet_pton
 #elif HAVE_LWIP_SOCKET
 #include "lwip/sockets.h"
+#ifndef close
 #define close(fd) lwip_close(fd)
+#endif
 #else
 #error "Unknow platform!"
 #endif

@@ -33,7 +33,7 @@
 #include <stddef.h>
 #include <unistd.h>
 
-#include "tcp_server_test.h"
+#include "net_demo.h"
 #include "net_common.h"
 
 static char request[128] = "";
@@ -103,3 +103,5 @@ do_cleanup:
 
     close(sockfd);
 }
+
+SERVER_TEST_DEMO(TcpServerTest);

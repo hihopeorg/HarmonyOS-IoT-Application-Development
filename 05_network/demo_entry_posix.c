@@ -26,7 +26,16 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "net_demo_common.h"
-#include "tcp_server_test.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "net_demo.h"
+#include "net_params.h"
 
-SERVER_TEST_DEMO(TcpServerTest);
+int main(int argc, char* argv[])
+{
+    short port = argc > 1 ? atoi(argv[1]) : PARAM_SERVER_PORT;
+    char* host = argc > 2 ? argv[2] : PARAM_SERVER_ADDR;
+
+    NetDemoTest(port, host);
+    return 0;
+}
