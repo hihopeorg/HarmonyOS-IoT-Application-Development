@@ -1,4 +1,4 @@
-# Harmony OS物联网应用开发实战 第三章
+# 使用Harmony OS控制外设——读取传感器
 
 **本节课程中主要介绍如何在HiSpark WiFi IoT套件上使用Hamony OS的传感器相关编程接口，即环境感知能力。**
 

@@ -1,4 +1,4 @@
-# Harmony OS物联网应用开发实战 第二章
+# 使用Harmony OS控制外设——输入输出
 
 **本节课程主要介绍如何在HiSpark WiFi IoT套件上使用Hamony OS进行编程，以及如何使用GPIO输入输出功能。**
 
@@ -6,15 +6,18 @@
 
 ## 相关知识点
 
-* 官方第一个应用程序示例演示
+*  Hi3861开发板第一个示例程序演示
   * 熟悉使用DevEco Device Tool插件进行程序烧录
   * 熟悉串口调试工具sscom的使用
-* 官方文档中控制核心板上LED的演示
+  
+* 官方文档中控制核心板上LED的`led_example.c`讲解及演示
 	* 源码路径：`applications/sample/wifi-iot/app/iothardware/led_example.c`
 	* Harmony OS IoT内核（liteos-m）接口——[CMSIS-RTOS API v2](https://arm-software.github.io/CMSIS_5/RTOS2/html/rtos_api2.html)
 	  * 线程创建`osThreadNew`
 	* 鸿蒙系统启动注册接口——`ohos_init.h`
-	  * `APP_FEATURE_INIT`注册自启动函数
+	  * `SYS_RUN`注册启动阶段自动运行的函数
+	  * 不同宏对应不同阶段，应用代码推荐使用：
+	    * `APP_FEATURE_INIT`注册宏
 	* 使用GPIO接口输出高低电平，实现控制LED灯亮灭
 	  * 设置管脚功能`IoSetFunc`
 	  * 设置GPIO引脚方向`GpioSetDir`
@@ -22,6 +25,7 @@
 	  * 设置内部上拉下拉状态`IoSetPull`（没有外部上拉电阻时需要设置上拉，才能保证能够检测到下降沿）
 	  * 注册中断处理函数`GpioRegisterIsrFunc`，具体参数使用参考头文件说明
 	* 具体使用参考`wifiiot_gpio.h`和`wifiiot_gpio_ex.h`文件里的注释
+
 * HiSpark Wi-Fi IoT 开发套件 交通灯板 控制
 	* 使用PWM接口输出PWM方波，实现蜂鸣器控制
 	* 使用GPIO接口的部分和上一个示例类似

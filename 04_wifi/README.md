@@ -20,7 +20,7 @@
 
 鸿蒙WiFi API参考：https://gitee.com/openharmony/docs/blob/master/api/api-LinkIoT/Wifiservice.md
 
-
+想要简单易用WiFi接口，可以使用我们封装的：https://gitee.com/hihopeorg/easy_wifi
 
 ## STA模式编程指南
 

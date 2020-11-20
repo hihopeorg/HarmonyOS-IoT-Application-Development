@@ -22,9 +22,9 @@
   * Harmony OS ADC相关接口的使用（具体参考`wifiiot_adc.h`中的注释）
   * Harmony OS I2C相关接口的使用（具体参考`wifiiot_i2c.h`中的注释）
   
-* 第四章 [使用Harmony OS控制WiFi——连接热点、创建热点](04_wifi/README.md)
+* 第四章 [Harmony OS WiFi编程——连接热点、创建热点](04_wifi/README.md)
 
-* 第五章 [使用Harmony OS进行网络编程——使用TCP/IP协议](05_network/README.md)
+* 第五章 [Harmony OS 网络编程——使用TCP/IP协议](05_network/README.md)
 
 * 第六章 使用Harmony OS进行物联网应用开发——使用MQTT、CoAP协议
 

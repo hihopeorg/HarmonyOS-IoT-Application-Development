@@ -12,7 +12,7 @@ netcat是一个非常强大的网络实用工具，可以用它来调试TCP/UDP�
 
 Linux上可以使用发行版的包管理器安装，例如Debian/Ubuntu上：
 
-    * `sudo apt-get install netcat`
+* `sudo apt-get install netcat`
 
 Windows上，MobaXterm工具上也可以用 `apt-get install netcat` 安装；
 
