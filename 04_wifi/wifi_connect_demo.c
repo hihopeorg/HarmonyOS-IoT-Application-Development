@@ -109,7 +109,6 @@ static void WifiConnectTask(void *arg)
         osDelay(50);
 
         // 联网业务开始
-        // 这里是网络业务代码...
         struct netif* iface = netifapi_netif_find("wlan0");
         if (iface) {
             err_t ret = netifapi_dhcp_start(iface);
@@ -120,8 +119,16 @@ static void WifiConnectTask(void *arg)
             printf("netifapi_netif_common: %d\r\n", ret);
         }
 
-        osDelay(800);
+        // 模拟一段时间的联网业务
+        int timeout = 60;
+        while (timeout--) {
+            osDelay(100);
+            printf("after %d seconds, I'll disconnect WiFi!\n", timeout);
+        }
+
         // 联网业务结束
+        err_t ret = netifapi_dhcp_stop(iface);
+        printf("netifapi_dhcp_stop: %d\r\n", ret);
 
         Disconnect(); // disconnect with your AP
 
