@@ -1,6 +1,6 @@
 # Harmony OS物联网应用开发实战
 
-《Harmony OS物联网应用开发实战》课程资料（包含代码）
+[《Harmony OS物联网应用开发实战》课程资料（包含代码）](https://gitee.com/hihopeorg/HarmonyOS-IoT-Application-Development)
 
 **持续更新中，欢迎点右上角的 Star 关注本项目**
 
@@ -24,7 +24,7 @@
   
 * 第四章 [使用Harmony OS控制WiFi——连接热点、创建热点](04_wifi/README.md)
 
-* 第五章 使用Harmony OS进行网络编程——使用TCP/IP协议
+* 第五章 [使用Harmony OS进行网络编程——使用TCP/IP协议](05_network/README.md)
 
 * 第六章 使用Harmony OS进行物联网应用开发——使用MQTT、CoAP协议
 
